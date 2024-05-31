@@ -1,0 +1,1 @@
+export const categories = ['Almacen','Carniceria','Panaderia','Verdulaeria','Sueldo','Alquiler','Auto','Tarjetas','Salidas','Regalos','Cecilia varios','Elizabeth varios','Fernando varios']
