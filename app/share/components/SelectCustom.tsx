@@ -17,12 +17,13 @@ const SelectCustom = ({
   setValue
 }:
 any): ReactElement => {
-
+  const id = Date.now().toString();
   return (
-    <div >
+    <div className="w-full">
       {!isStringEmpty(label) && <div>{label}</div>}
-      <div>
+      <div className="w-full">
         <Select
+        id={id}
           aria-sort="ascending"
           defaultValue={defaultValue}
           noOptionsMessage={() => "No hay opciones"}
@@ -63,7 +64,7 @@ any): ReactElement => {
           }}
           isDisabled={isDisabled}
           isMulti={isMulti}
-          isClearable
+          // isClearable
           options={options}
           value={value ?? null}
           onChange={setValue}

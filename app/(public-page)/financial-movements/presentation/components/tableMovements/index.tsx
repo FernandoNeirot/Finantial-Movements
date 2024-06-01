@@ -31,16 +31,19 @@ export const TableMovements = ({data}:Props):JSX.Element => {
             .filter((item: any) => item.paid === isPaid)
             .map((movement: any) => (
               <div
-                key={movement.id}
-                className="my-2 pr-4 flex justify-between items-center bg-slate-600"
+              key={movement.id}
+              className="my-2 pr-4 flex justify-between items-center bg-slate-600"
               >
+              <p className="ml-5">{movement.account}</p>  
                 <p className="mx-2">{movement.category}</p>
-                <p className="">{movement.currency}</p>
+                <span className="flex items-center">
+                <p className="mr-2">{movement.currency}</p>
                 <p className="my-2 ml-1">
                   {movement.amount.toLocaleString("es-AR")}
                 </p>
-                <p className="">{movement.account}</p>
-                <FaEye className="" />
+
+                </span>
+                {/* <FaEye className="" /> */}
               </div>
             ))}
         </div>
