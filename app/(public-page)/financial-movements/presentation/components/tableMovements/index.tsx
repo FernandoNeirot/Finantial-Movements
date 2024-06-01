@@ -4,36 +4,23 @@ import dayjs from "dayjs";
 import { Checkbox } from "../checkbox";
 import { FaEye } from "react-icons/fa";
 import es from "dayjs/locale/es";
-import { IoIosAddCircle } from "react-icons/io";
-export interface MovementViewModel {
-  month: string;
-  movements: Movement[];
+import { MovementViewModel } from "../../../domain/entities/Movement.entity";
+
+export interface Props {
+  data: MovementViewModel[];
 }
 
-export interface Movement {
-  account: string;
-  type: string;
-  description: string;
-  currency: string;
-  category: string;
-  paid: boolean;
-  date: string;
-  amount: number;
-  id: string;
-  hola: boolean;
-}
-
-export const TableMovements = ({ movements }: MovementViewModel) => {
+export const TableMovements = ({data}:Props):JSX.Element => {
   dayjs.locale(es);
   const [isPaid, setIsPaid] = React.useState(true);
-
+  console.log("movements",data);
   const handleFilterChange = (value: boolean) => {
     setIsPaid(value);
   };
   return (
     <div className=" px-5">
       <Checkbox onChange={handleFilterChange} label="Ver pendientes" />
-      {movements.map((item: any) => (
+      {data.map((item: any) => (
         <div key={item.month} className="my-4">
           {item.data.some((item: any) => item.paid === isPaid) && (
             <h1 className="text-xl font-bold">
