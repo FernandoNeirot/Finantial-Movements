@@ -7,9 +7,11 @@ import { categories } from "./mock";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaCircleCheck } from "react-icons/fa6";
 import Link from "next/link";
-import { MdCancel, MdCheckCircle } from "react-icons/md";
+import { MdAccessibilityNew, MdCancel, MdCheckCircle } from "react-icons/md";
 import { AddMovement } from "../application/post/getAllMovements";
 import dayjs from "dayjs";
+import { BsCashStack } from "react-icons/bs";
+import { SiGroupon, SiMercadopago, SiNaver } from "react-icons/si";
 
 interface Option {
   value: string | number | boolean;
@@ -31,7 +33,7 @@ export default function NewMovement() {
   });
   const [paid, setPaid] = React.useState({
     value: true,
-    label: "Pagado",
+    label: "Si",
   });
   const [currency, setCurrency] = React.useState({
     value: "$",
@@ -42,7 +44,6 @@ export default function NewMovement() {
 
   const handleChangeAmount = (value: string) => {
     const newValue: number = Number(value.replace(/\D/g, ""));
-    console.log((200.25).toLocaleString("es-AR"));
     setAmount(newValue.toLocaleString("es-AR"));
   };
 
@@ -80,7 +81,50 @@ export default function NewMovement() {
       }
     } 
   }
-
+  const getIconType = (type: string) => {
+    switch (type) {
+      case "Mercado Pago":
+        return (
+          <SiMercadopago
+            size={40}
+            className="ml-5 bg-white p-[3px] rounded-[10px]"
+            style={{ fill: "#027ffc" }}
+          />
+        );
+      case "Efectivo":
+        return (
+          <BsCashStack
+            size={40}
+            className="ml-5 bg-white p-[3px] rounded-[10px]"
+            style={{ fill: "#0f8005" }}
+          />
+        );
+      case "Banco Galicia":
+        return (
+          <SiGroupon
+            size={40}
+            className="ml-5 bg-white p-[3px] rounded-[10px]"
+            style={{ fill: "#fc7702" }}
+          />
+        );
+      case "Tarjeta Naranja":
+        return (
+          <SiNaver
+            size={40}
+            className="ml-5 bg-white p-[3px] rounded-[10px]"
+            style={{ fill: "#dd9400" }}
+          />
+        );
+      default:
+        return (
+          <MdAccessibilityNew
+            size={40}
+            className="ml-5 bg-white p-[3px] rounded-[10px]"
+            style={{ fill: "#fc0202" }}
+          />
+        );
+    }
+  };
   return (
     <div className=" w-full flex justify-center pb-[75px]">
       <form className=" w-full max-w-[900px]">
@@ -108,12 +152,12 @@ export default function NewMovement() {
             setValue={setAccount}
             options={[
               "Efectivo",
-              "Banco galicia",
+              "Banco Galicia",
               "Tarjeta Naranja",
-              "Mercado libre",
+              "Mercado Pago",
             ].map((account: string) => ({
               value: account,
-              label: account,
+              label: `${account}`,
             }))}
           />
         </div>
