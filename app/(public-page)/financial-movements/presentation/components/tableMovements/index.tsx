@@ -2,24 +2,24 @@
 import React from "react";
 import dayjs from "dayjs";
 import { Checkbox } from "../checkbox";
-import { FaEye } from "react-icons/fa";
 import es from "dayjs/locale/es";
-import { MovementViewModel } from "../../../domain/entities/Movement.entity";
+import { MovementBalanceViewModel } from "../../../domain/entities/Movement.entity";
 import { SiGroupon, SiMercadopago, SiNaver } from "react-icons/si";
 import { BsCashStack } from "react-icons/bs";
 import { MdAccessibilityNew } from "react-icons/md";
 
 export interface Props {
-  data: MovementViewModel[];
+  data: MovementBalanceViewModel;
+  dolarBlue: any;
 }
 
-export const TableMovements = ({ data }: Props): JSX.Element => {
+export const TableMovements = ({ data,dolarBlue }: Props): JSX.Element => {
   dayjs.locale(es);
   const [isPaid, setIsPaid] = React.useState(true);
   const handleFilterChange = (value: boolean) => {
     setIsPaid(value);
   };
-
+  console.log(data)
   const getIconType = (type: string) => {
     switch (type) {
       case "Mercado Pago":
@@ -64,11 +64,28 @@ export const TableMovements = ({ data }: Props): JSX.Element => {
         );
     }
   };
-
   return (
     <div className=" px-5">
-      <Checkbox onChange={handleFilterChange} label="Ver pendientes" />
-      {data.map((item: any) => (
+      <div>
+        <div className=" w-full text-center border-b-2 border-blue-400 pb-3">
+          Balances
+        </div>
+
+        <div className="flex justify-between pt-2">
+          <span>{`Completado ARS ${data.balanceArPaid.toLocaleString("es-AR")}`}</span>
+          <span>{`Completado USD ${data.balanceUSDPaid.toLocaleString("es-AR")}`}</span>
+        </div>
+        <div className="flex justify-between border-blue-400 pb-3">
+          <span>Pendiente ARS: {data.balanceAr.toLocaleString("es-AR")}</span>
+          <span>Pendiente USD: {data.balanceUSD.toLocaleString("es-AR")}</span>
+        </div>
+        <div className=" w-full text-center border-b-2 border-blue-400"></div>
+      </div>
+      <div className="flex items-center">
+        <Checkbox onChange={handleFilterChange} label="Ver pendientes" />
+        {dolarBlue}
+      </div>
+      {data.movements.map((item: any) => (
         <div key={item.month} className="my-4">
           {item.data.some((item: any) => item.paid === isPaid) && (
             <h1 className="text-xl font-bold">
