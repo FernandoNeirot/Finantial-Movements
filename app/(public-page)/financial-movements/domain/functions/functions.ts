@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
-import { MovementEntity } from "../entities/Movement.entity";
+import { MovementBalanceEntity, MovementBalanceViewModel, MovementEntity, MovementViewModel } from "../entities/Movement.entity";
 
-export const createGroupMonth = (movements: MovementEntity[]) => {
+export const createGroupMonth = (movements: MovementEntity[]):MovementBalanceViewModel => {
   const groupedData = movements
     .sort((a: MovementEntity, b: MovementEntity) => {
       return dayjs(b.date).diff(dayjs(a.date));
@@ -14,9 +14,31 @@ export const createGroupMonth = (movements: MovementEntity[]) => {
 
       map.get(month).push({
         ...item,
-        hola: true,
       });
       return map;
     }, new Map());
-  return Array.from(groupedData ?? [], ([month, data]) => ({ month, data }))
+  const response = {
+    movements: Array.from(groupedData ?? [], ([month, data]) => ({ month, data })),
+    balanceArPaid: calcBalance(movements,'$',true),
+    balanceUSDPaid: calcBalance(movements,'USD',true),
+    balanceAr: calcBalance(movements,'$',false),
+    balanceUSD: calcBalance(movements,'USD',false)
+  }
+  return response
 };
+
+// export const getBalance =(movements: MovementViewModel[])=>{
+//   const balanceArPaid = calcBalance(movements,'$',true)
+//   const balanceUSDPaid = calcBalance(movements,'USD',true)
+//   const balanceAr = calcBalance(movements,'$',false)
+//   const balanceUSD = calcBalance(movements,'USD',false)
+// }
+
+export const calcBalance =(movements:MovementBalanceEntity[],currency:string,paid:boolean)=>{
+  return movements.filter(item=>item.currency === currency && item.paid ===paid).reduce((acc, item) => {
+    if (item.type === "Gasto") {
+      return acc - item.amount;
+    }
+    return acc + item.amount;
+  }, 0);
+}

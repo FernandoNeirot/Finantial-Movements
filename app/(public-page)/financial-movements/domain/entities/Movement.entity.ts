@@ -1,3 +1,10 @@
+export interface MovementBalanceEntity {
+  amount: number;
+  category: string;
+  paid: boolean;
+  type: string;
+  currency: string;
+}
 export interface MovementEntity {
   id?: string;
   date: Date | string | null;
@@ -13,4 +20,12 @@ export interface MovementEntity {
 export interface MovementViewModel {
   month: string;
   data: MovementEntity[];
+}
+
+export interface MovementBalanceViewModel {
+  movements:MovementViewModel[]
+  balanceArPaid: number;
+  balanceUSDPaid: number;
+  balanceAr: number;
+  balanceUSD: number;
 }
