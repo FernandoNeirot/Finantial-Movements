@@ -89,7 +89,6 @@ export default function AddUpdateMovement({
     if (validateForm()) {
       let response: boolean = false;
       const request = {
-        id: movement?.id, 
         category: category?.value as string,
         account: account.value,
         amount: Number(amount.replace(/\D/g, "")),
@@ -100,7 +99,7 @@ export default function AddUpdateMovement({
         type: type.value,
       };
       if (movement) {
-        response = await UpdateMovement(request);
+        response = await UpdateMovement({...request,id:movement.id});
       } else {
         response = await AddMovement(request);
       }
@@ -181,7 +180,8 @@ export default function AddUpdateMovement({
             placeHolder="Seleccionar"
             setValue={setAccount}
             options={[
-              "Efectivo",
+              "Efectivo Fer",
+              "Efectivo Ely",
               "Banco Galicia",
               "Tarjeta Naranja",
               "Mercado Pago",
