@@ -44,7 +44,15 @@ export const TableMovements = ({ data, dolarBlue }: Props): JSX.Element => {
             style={{ fill: "#027ffc" }}
           />
         );
-      case "Efectivo":
+      case "Efectivo Fer":
+        return (
+          <BsCashStack
+            size={40}
+            className="ml-5 bg-white p-[3px] rounded-[10px]"
+            style={{ fill: "#0f8005" }}
+          />
+        );
+        case "Efectivo Ely":
         return (
           <BsCashStack
             size={40}
@@ -92,27 +100,23 @@ export const TableMovements = ({ data, dolarBlue }: Props): JSX.Element => {
             <div className=" w-full text-center border-b-2 border-blue-400 pb-3">
               Balances
             </div>
-            <div className="flex justify-between pt-2">
-              <span>{`Completado ARS ${data.balanceArPaid.toLocaleString(
-                "es-AR"
-              )}`}</span>
-              <span>{`Completado USD ${data.balanceUSDPaid.toLocaleString(
-                "es-AR"
-              )}`}</span>
+
+            <div className="flex justify-between border-t p-2 border-blue-400 pb-3">{`Completado ARS ${data.balanceArPaid.toLocaleString(
+              "es-AR"
+            )} (El total que queda de pesos)`}</div>
+            <div className="flex justify-between border-t p-2 border-blue-400 pb-3">{`Completado USD ${data.balanceUSDPaid.toLocaleString(
+              "es-AR"
+            )} (El total que queda de dolares)`}</div>
+
+            <div className="flex justify-start items-center border-t p-2 border-blue-400 pb-3">Pendiente ARS: {data.balanceAr.toLocaleString("es-AR")}<Checkbox onChange={handleFilterChange} label="Ver pendientes" />    </div>
+            <div  className="flex justify-start border-t p-2 border-blue-400 pb-3">
+              Pendiente USD: {`${data.balanceUSD.toLocaleString("es-AR")} ( $ ${(dolarBlue*data.balanceUSD).toLocaleString("es-AR")} - Valor dolar: $ ${dolarBlue})`}
             </div>
-            <div className="flex justify-between border-blue-400 pb-3">
-              <span>
-                Pendiente ARS: {data.balanceAr.toLocaleString("es-AR")}
-              </span>
-              <span>
-                Pendiente USD: {data.balanceUSD.toLocaleString("es-AR")}
-              </span>
-            </div>
+
             <div className=" w-full text-center border-b-2 border-blue-400"></div>
           </div>
           <div className="flex items-center">
-            <Checkbox onChange={handleFilterChange} label="Ver pendientes" />
-            {dolarBlue}
+                    
           </div>
           {data.movements.map((item: any) => (
             <div key={item.month} className="my-4">
@@ -129,10 +133,14 @@ export const TableMovements = ({ data, dolarBlue }: Props): JSX.Element => {
                     className="my-2 pr-4 flex justify-between items-center bg-slate-600"
                   >
                     <span className="flex items-center">
-                      {getIconType(movement.account)}
+                      <span className="w-[50px]">{getIconType(movement.account)}</span>
                       <p className={`ml-5 `}>{movement.category}</p>
                     </span>
-                      <p className={` text-left ml-1 text-[10px] w-full text-ellipsis overflow-auto`}>{movement.description}</p>
+                    <p
+                      className={` text-left ml-1 text-[10px] w-full text-ellipsis overflow-auto`}
+                    >
+                      {movement.description}
+                    </p>
                     <span className="flex items-center whitespace-nowrap">
                       <p
                         className={`my-2 ml-1 ${
