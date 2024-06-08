@@ -105,55 +105,11 @@ export default function AddUpdateMovement({
       }
 
       if (response) {
-        setActiveForm(false);
-        setMovementSelected(null);
+        window.location.reload();
       }
     }
   };
-  const getIconType = (type: string) => {
-    switch (type) {
-      case "Mercado Pago":
-        return (
-          <SiMercadopago
-            size={40}
-            className="ml-5 bg-white p-[3px] rounded-[10px]"
-            style={{ fill: "#027ffc" }}
-          />
-        );
-      case "Efectivo":
-        return (
-          <BsCashStack
-            size={40}
-            className="ml-5 bg-white p-[3px] rounded-[10px]"
-            style={{ fill: "#0f8005" }}
-          />
-        );
-      case "Banco Galicia":
-        return (
-          <SiGroupon
-            size={40}
-            className="ml-5 bg-white p-[3px] rounded-[10px]"
-            style={{ fill: "#fc7702" }}
-          />
-        );
-      case "Tarjeta Naranja":
-        return (
-          <SiNaver
-            size={40}
-            className="ml-5 bg-white p-[3px] rounded-[10px]"
-            style={{ fill: "#dd9400" }}
-          />
-        );
-      default:
-        return (
-          <MdAccessibilityNew
-            size={40}
-            className="ml-5 bg-white p-[3px] rounded-[10px]"
-            style={{ fill: "#fc0202" }}
-          />
-        );
-    }
-  };
+
   return (
     <div className=" w-full flex justify-center pb-[75px]">
       <form className=" w-full max-w-[900px]">

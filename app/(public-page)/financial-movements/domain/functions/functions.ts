@@ -22,17 +22,11 @@ export const createGroupMonth = (movements: MovementEntity[]):MovementBalanceVie
     balanceArPaid: calcBalance(movements,'$',true),
     balanceUSDPaid: calcBalance(movements,'USD',true),
     balanceAr: calcBalance(movements,'$',false),
-    balanceUSD: calcBalance(movements,'USD',false)
+    balanceUSD: calcBalance(movements,'USD',false),
+    stateCompleted: calcState(movements)
   }
   return response
 };
-
-// export const getBalance =(movements: MovementViewModel[])=>{
-//   const balanceArPaid = calcBalance(movements,'$',true)
-//   const balanceUSDPaid = calcBalance(movements,'USD',true)
-//   const balanceAr = calcBalance(movements,'$',false)
-//   const balanceUSD = calcBalance(movements,'USD',false)
-// }
 
 export const calcBalance =(movements:MovementBalanceEntity[],currency:string,paid:boolean)=>{
   return movements.filter(item=>item.currency === currency && item.paid ===paid).reduce((acc, item) => {
@@ -41,4 +35,36 @@ export const calcBalance =(movements:MovementBalanceEntity[],currency:string,pai
     }
     return acc + item.amount;
   }, 0);
+}
+
+export const calcState =(movements:MovementEntity[])=>{
+  let bancoGalicia = 0
+  let mercadoPago = 0
+  let efectivoFer=0
+  let efectivoEly=0
+  let tarjetaNaranja=0
+  movements.filter(item=>item.paid).forEach((item:MovementEntity)=>{
+      if(item.account === "Banco Galicia"){
+        bancoGalicia = bancoGalicia + (item.type !=="Gasto" ? item.amount : -item.amount);
+      }
+      if(item.account === "Mercado Pago"){
+        mercadoPago = mercadoPago + (item.type !=="Gasto"? item.amount : -item.amount);
+      }
+      if(item.account === "Efectivo Fer"){
+        efectivoFer = efectivoFer + (item.type !=="Gasto"? item.amount : -item.amount);
+      }
+      if(item.account === "Efectivo Ely"){
+        efectivoEly = efectivoEly + (item.type !=="Gasto"? item.amount : -item.amount);
+      }
+      if(item.account === "Tarjeta Naranja"){
+        tarjetaNaranja = tarjetaNaranja + (item.type !=="Gasto"? item.amount : -item.amount);
+      }
+  })
+  return {
+    bancoGalicia,
+    mercadoPago,
+    efectivoFer,
+    efectivoEly,
+    tarjetaNaranja
+  }
 }

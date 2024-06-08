@@ -1,4 +1,4 @@
-export const categories = [
+export const categories: string[] = [
   "Almacen",
   "Alquiler",
   "Auto",
@@ -7,21 +7,13 @@ export const categories = [
   "Elizabeth",
   "Farmacia",
   "Fernando",
-  "Garage",
   "Jardin",
-  "Nafta",
-  "Netflix",
-  "Panaderia",
-  "Patente",
-  "Peajes",
-  "Personal Flow",
   "Regalos",
-  "Remis",
-  "Saldo Inicial",
+  "Inicial",
   "Sueldo",
   "Salidas",
-  "Servicio Luz",
-  "Servicio Gas",
+  "Servicios",
   "Tarjetas",
-  "Verduleria",
+  "Transferencia",
+  "Verduleria"
 ];
