@@ -31,8 +31,8 @@ export default function AddUpdateMovement({
   setActiveForm,
 }: Props) {
   const [account, setAccount] = React.useState({
-    value: movement?.account ?? "Efectivo",
-    label: movement?.account ?? "Efectivo",
+    value: movement?.account ?? "Efectivo Ely",
+    label: movement?.account ?? "Efectivo Ely",
   });
   const [amount, setAmount] = React.useState(
     movement?.amount ? movement.amount.toLocaleString("es-AR") : ""
