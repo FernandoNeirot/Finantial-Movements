@@ -10,22 +10,20 @@ import {
 import { SiGroupon, SiMercadopago, SiNaver } from "react-icons/si";
 import { BsCashStack } from "react-icons/bs";
 import { MdAccessibilityNew, MdCancel } from "react-icons/md";
-import { FaEdit, FaRegEdit } from "react-icons/fa";
-import Link from "next/link";
+import { FaEdit } from "react-icons/fa";
 import AddUpdateMovement from "../addUpdateMovement/AddUpdateMovement";
 import { IoIosAddCircle } from "react-icons/io";
-import { RiEdit2Fill } from "react-icons/ri";
 import { VscEdit } from "react-icons/vsc";
-import { set } from "firebase/database";
-
 export interface Props {
   data: MovementBalanceViewModel;
   dolarBlue: any;
 }
 
 export const TableMovements = ({ data, dolarBlue }: Props): JSX.Element => {
+  console.log(data);
   dayjs.locale(es);
   const [isPaid, setIsPaid] = React.useState(true);
+  const [showByAccount, setShowByAccount] = React.useState(false);
   const [movementSelected, setMovementSelected] =
     React.useState<MovementEntity | null>(null);
   const [activeForm, setActiveForm] = React.useState(false);
@@ -52,7 +50,7 @@ export const TableMovements = ({ data, dolarBlue }: Props): JSX.Element => {
             style={{ fill: "#0f8005" }}
           />
         );
-        case "Efectivo Ely":
+      case "Efectivo Ely":
         return (
           <BsCashStack
             size={40}
@@ -101,23 +99,67 @@ export const TableMovements = ({ data, dolarBlue }: Props): JSX.Element => {
               Balances
             </div>
 
-            <div className="flex justify-between border-t p-2 border-blue-400 pb-3">{`Completado ARS ${data.balanceArPaid.toLocaleString(
+            <div className="flex justify-between flex-col border-t p-2 border-blue-400 pb-3">
+              <span className="pt-2 pb-2">
+                {`Plata en total $ ${data.balanceArPaid.toLocaleString(
+                  "es-AR"
+                )} `}
+                <span
+                  onClick={() => setShowByAccount(!showByAccount)}
+                  className="p-2 text-gray-100 bg-green-800 ml-2 rounded-md cursor-pointer"
+                >
+                  {`${showByAccount ? "Ocultar" : "Ver"}`} por cuentas
+                </span>
+              </span>
+              {showByAccount && (
+                <>
+                  <div className=" p-1 pl-5">
+                    Banco Galicia: ${" "}
+                    {data.stateCompleted.bancoGalicia.toLocaleString("es-AR")}
+                  </div>
+                  <div  className=" p-1 pl-5">
+                    Mercado Pago: ${" "}
+                    {data.stateCompleted.mercadoPago.toLocaleString("es-AR")}
+                  </div>
+                  <div className=" p-1 pl-5">
+                    Tarjeta Naranja: ${" "}
+                    {data.stateCompleted.tarjetaNaranja.toLocaleString("es-AR")}
+                  </div>
+                  <div className=" p-1 pl-5">
+                    Efectivo Ely: ${" "}
+                    {data.stateCompleted.efectivoEly.toLocaleString("es-AR")}
+                  </div>
+                  <div className="p-1 pl-5">
+                    Efectivo Fer: ${" "}
+                    {data.stateCompleted.efectivoFer.toLocaleString("es-AR")}
+                  </div>
+                  <div className="p-1 pl-5 bg-blue-800 w-auto">
+                    total: $ {data.balanceArPaid.toLocaleString("es-AR")}
+                  </div>
+                </>
+              )}
+            </div>
+            <div className="flex justify-between border-t p-2 border-blue-400 pb-3">{`Dolares en total USD ${data.balanceUSDPaid.toLocaleString(
               "es-AR"
-            )} (El total que queda de pesos)`}</div>
-            <div className="flex justify-between border-t p-2 border-blue-400 pb-3">{`Completado USD ${data.balanceUSDPaid.toLocaleString(
-              "es-AR"
-            )} (El total que queda de dolares)`}</div>
+            )}`}</div>
 
-            <div className="flex justify-start items-center border-t p-2 border-blue-400 pb-3">Pendiente ARS: {data.balanceAr.toLocaleString("es-AR")}<Checkbox onChange={handleFilterChange} label="Ver pendientes" />    </div>
-            <div  className="flex justify-start border-t p-2 border-blue-400 pb-3">
-              Pendiente USD: {`${data.balanceUSD.toLocaleString("es-AR")} ( $ ${(dolarBlue*data.balanceUSD).toLocaleString("es-AR")} - Valor dolar: $ ${dolarBlue})`}
+            <div className="flex justify-start items-center border-t p-2 border-blue-400 pb-3">
+              Pendiente ARS: {data.balanceAr.toLocaleString("es-AR")}
+              <Checkbox
+                onChange={handleFilterChange}
+                label="Ver pendientes"
+              />{" "}
+            </div>
+            <div className="flex justify-start border-t p-2 border-blue-400 pb-3">
+              Pendiente USD:{" "}
+              {`${data.balanceUSD.toLocaleString("es-AR")} (dolar: $ ${dolarBlue} => ${(
+                dolarBlue * data.balanceUSD
+              ).toLocaleString("es-AR")})`}
             </div>
 
             <div className=" w-full text-center border-b-2 border-blue-400"></div>
           </div>
-          <div className="flex items-center">
-                    
-          </div>
+          <div className="flex items-center"></div>
           {data.movements.map((item: any) => (
             <div key={item.month} className="my-4">
               {item.data.some((item: any) => item.paid === isPaid) && (
@@ -133,7 +175,9 @@ export const TableMovements = ({ data, dolarBlue }: Props): JSX.Element => {
                     className="my-2 pr-4 flex justify-between items-center bg-slate-600"
                   >
                     <span className="flex items-center">
-                      <span className="w-[50px]">{getIconType(movement.account)}</span>
+                      <span className="w-[50px]">
+                        {getIconType(movement.account)}
+                      </span>
                       <p className={`ml-5 `}>{movement.category}</p>
                     </span>
                     <p

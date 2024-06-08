@@ -21,11 +21,18 @@ export interface MovementViewModel {
   month: string;
   data: MovementEntity[];
 }
-
+export interface StateCompleted {
+  bancoGalicia: number;
+  mercadoPago: number;
+  efectivoFer: number;
+  efectivoEly: number;
+  tarjetaNaranja: number;
+}
 export interface MovementBalanceViewModel {
-  movements:MovementViewModel[]
+  movements: MovementViewModel[];
   balanceArPaid: number;
   balanceUSDPaid: number;
   balanceAr: number;
   balanceUSD: number;
+  stateCompleted: StateCompleted;
 }
