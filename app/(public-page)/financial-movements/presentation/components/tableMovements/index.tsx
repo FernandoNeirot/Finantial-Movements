@@ -24,6 +24,7 @@ export const TableMovements = ({ data, dolarBlue }: Props): JSX.Element => {
   dayjs.locale(es);
   const [isPaid, setIsPaid] = React.useState(true);
   const [showByAccount, setShowByAccount] = React.useState(false);
+  const [showBalace, setShowBalace] = React.useState(false);
   const [movementSelected, setMovementSelected] =
     React.useState<MovementEntity | null>(null);
   const [activeForm, setActiveForm] = React.useState(false);
@@ -95,69 +96,119 @@ export const TableMovements = ({ data, dolarBlue }: Props): JSX.Element => {
       ) : (
         <div className=" px-5">
           <div>
-            <div className=" w-full text-center border-b-2 border-blue-400 pb-3">
-              Balances
-            </div>
-
-            <div className="flex justify-between flex-col border-t p-2 border-blue-400 pb-3">
-              <span className="pt-2 pb-2">
-                {`Plata en total $ ${data.balanceArPaid.toLocaleString(
-                  "es-AR"
-                )} `}
-                <span
-                  onClick={() => setShowByAccount(!showByAccount)}
-                  className="p-2 text-gray-100 bg-green-800 ml-2 rounded-md cursor-pointer"
-                >
-                  {`${showByAccount ? "Ocultar" : "Ver"}`} por cuentas
-                </span>
+            <div className=" w-full text-center border-b-2 mt-2 border-blue-400 pb-3">
+              Balances{" "}
+              <span
+                className=" p-2 ml-5 bg-green-800 rounded-sm cursor-pointer"
+                onClick={() => setShowBalace(!showBalace)}
+              >
+                {`${showBalace ? "Ocultar" : "Ver"}`} balances
               </span>
-              {showByAccount && (
-                <>
-                  <div className=" p-1 pl-5">
-                    Banco Galicia: ${" "}
-                    {data.stateCompleted.bancoGalicia.toLocaleString("es-AR")}
-                  </div>
-                  <div  className=" p-1 pl-5">
-                    Mercado Pago: ${" "}
-                    {data.stateCompleted.mercadoPago.toLocaleString("es-AR")}
-                  </div>
-                  <div className=" p-1 pl-5">
-                    Tarjeta Naranja: ${" "}
-                    {data.stateCompleted.tarjetaNaranja.toLocaleString("es-AR")}
-                  </div>
-                  <div className=" p-1 pl-5">
-                    Efectivo Ely: ${" "}
-                    {data.stateCompleted.efectivoEly.toLocaleString("es-AR")}
-                  </div>
-                  <div className="p-1 pl-5">
-                    Efectivo Fer: ${" "}
-                    {data.stateCompleted.efectivoFer.toLocaleString("es-AR")}
-                  </div>
-                  <div className="p-1 pl-5 bg-blue-800 w-auto">
-                    total: $ {data.balanceArPaid.toLocaleString("es-AR")}
-                  </div>
-                </>
-              )}
             </div>
-            <div className="flex justify-between border-t p-2 border-blue-400 pb-3">{`Dolares en total USD ${data.balanceUSDPaid.toLocaleString(
-              "es-AR"
-            )}`}</div>
+            {showBalace && (
+              <>
+                <div className="border-b-2 border-t-2 pt-2 pb-2 border-blue-600">
+                  <span className="pb-5">
+                    Almacen + Carniceria + Verduleria = $
+                    {(
+                      (data.expensiveByCategory["Almacen"] +
+                        data.expensiveByCategory["Verduleria"] +
+                        data.expensiveByCategory["Carniceria"]) *
+                      -1
+                    ).toLocaleString("es-AR")}
+                  </span>
+                </div>
+                <div className="flex justify-between flex-col border-t p-2 border-blue-400 pb-3">
+                  <span className="pt-2 pb-2">
+                    {`Plata en total $ ${data.balanceArPaid.toLocaleString(
+                      "es-AR"
+                    )} `}
+                    <span
+                      onClick={() => setShowByAccount(!showByAccount)}
+                      className="p-2 text-gray-100 bg-green-800 ml-2 rounded-md cursor-pointer"
+                    >
+                      {`${showByAccount ? "Ocultar" : "Ver"}`} por cuentas
+                    </span>
+                  </span>
+                  {showByAccount && (
+                    <>
+                      <div className=" p-1 pl-5">
+                        Banco Galicia: ${" "}
+                        {data.stateCompleted.bancoGalicia.toLocaleString(
+                          "es-AR"
+                        )}
+                      </div>
+                      <div className=" p-1 pl-5">
+                        Mercado Pago: ${" "}
+                        {data.stateCompleted.mercadoPago.toLocaleString(
+                          "es-AR"
+                        )}
+                      </div>
+                      <div className=" p-1 pl-5">
+                        Tarjeta Naranja: ${" "}
+                        {data.stateCompleted.tarjetaNaranja.toLocaleString(
+                          "es-AR"
+                        )}
+                      </div>
+                      <div className=" p-1 pl-5">
+                        Efectivo Ely: ${" "}
+                        {data.stateCompleted.efectivoEly.toLocaleString(
+                          "es-AR"
+                        )}
+                      </div>
+                      <div className="p-1 pl-5">
+                        Efectivo Fer: ${" "}
+                        {data.stateCompleted.efectivoFer.toLocaleString(
+                          "es-AR"
+                        )}
+                      </div>
+                      <div className="p-1 pl-5 bg-blue-800 w-auto">
+                        total: $ {data.balanceArPaid.toLocaleString("es-AR")}
+                      </div>
+                    </>
+                  )}
+                </div>
+                <div className="border-t p-2 border-blue-400 pb-3">
+                  Dolares en total USD{" "}
+                  {`${data.balanceUSDPaid.toLocaleString("es-AR")}`}
+                  <div>{`(dolar: $ ${dolarBlue} => ${(
+                    dolarBlue * data.balanceUSDPaid
+                  ).toLocaleString("es-AR")})`}</div>
+                </div>
 
-            <div className="flex justify-start items-center border-t p-2 border-blue-400 pb-3">
-              Pendiente ARS: {data.balanceAr.toLocaleString("es-AR")}
-              <Checkbox
-                onChange={handleFilterChange}
-                label="Ver pendientes"
-              />{" "}
-            </div>
-            <div className="flex justify-start border-t p-2 border-blue-400 pb-3">
-              Pendiente USD:{" "}
-              {`${data.balanceUSD.toLocaleString("es-AR")} (dolar: $ ${dolarBlue} => ${(
-                dolarBlue * data.balanceUSD
-              ).toLocaleString("es-AR")})`}
-            </div>
-
-            <div className=" w-full text-center border-b-2 border-blue-400"></div>
+                <div className="flex justify-start items-center border-t p-2 border-blue-400 pb-3">
+                  Pendiente ARS: {data.balanceAr.toLocaleString("es-AR")}
+                  <Checkbox
+                    onChange={handleFilterChange}
+                    label="Ver pendientes"
+                  />{" "}
+                </div>
+                <div className="border-t p-2 border-blue-400 pb-3">
+                  Pendiente USD:{`${data.balanceUSD.toLocaleString("es-AR")}`}
+                  <div>{`(dolar: $ ${dolarBlue} => ${(
+                    dolarBlue * data.balanceUSD
+                  ).toLocaleString("es-AR")})`}</div>
+                </div>
+                <div className="border-b-2 border-t-2 pt-2 pb-2 border-blue-600">
+                  <span className="pb-5">Movimientos por categoria</span>
+                  <div className="flex max-w-[100%] overflow-auto pb-5">
+                    {Object.keys(data.expensiveByCategory).map((key) => (
+                      <div
+                        key={key}
+                        className=" bg-amber-900 p-3 ml-2 mr-2 whitespace-nowrap"
+                      >
+                        <span>{key}</span>
+                        <span>
+                          {` $${data.expensiveByCategory[key].toLocaleString(
+                            "es-AR"
+                          )}`}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
           <div className="flex items-center"></div>
           {data.movements.map((item: any) => (
@@ -204,7 +255,7 @@ export const TableMovements = ({ data, dolarBlue }: Props): JSX.Element => {
                       >
                         {`${
                           movement.type === "Gasto" ? "-" : ""
-                        } ${movement.amount.toLocaleString("es-AR")}`}
+                        }${movement.amount.toLocaleString("es-AR")}`}
                       </p>
                       {activeEdit && (
                         <FaEdit
