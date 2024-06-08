@@ -23,9 +23,27 @@ export const createGroupMonth = (movements: MovementEntity[]):MovementBalanceVie
     balanceUSDPaid: calcBalance(movements,'USD',true),
     balanceAr: calcBalance(movements,'$',false),
     balanceUSD: calcBalance(movements,'USD',false),
-    stateCompleted: calcState(movements)
+    stateCompleted: calcState(movements),
+    expensiveByCategory: calcExpensesByCategory(movements)
   }
   return response
+};
+
+export const calcExpensesByCategory = (movements: MovementEntity[]): Record<string, number> => {
+  const expensesByCategory: Record<string, number> = {};
+
+  movements
+    .filter(item => item.paid)
+    .sort((a, b) => a.category.localeCompare(b.category))
+    .forEach(item => {
+    if (expensesByCategory[item.category]) {
+      expensesByCategory[item.category] += (item.type==="Gasto"?-item.amount: item.amount );
+    } else {
+      expensesByCategory[item.category] = (item.type==="Gasto"?-item.amount: item.amount );
+    }
+  });
+
+  return expensesByCategory;
 };
 
 export const calcBalance =(movements:MovementBalanceEntity[],currency:string,paid:boolean)=>{
@@ -43,8 +61,9 @@ export const calcState =(movements:MovementEntity[])=>{
   let efectivoFer=0
   let efectivoEly=0
   let tarjetaNaranja=0
-  movements.filter(item=>item.paid).forEach((item:MovementEntity)=>{
-      if(item.account === "Banco Galicia"){
+  let comida = 0
+  movements.filter(item=>item.paid).forEach((item:MovementEntity)=>{      
+    if(item.account === "Banco Galicia"){
         bancoGalicia = bancoGalicia + (item.type !=="Gasto" ? item.amount : -item.amount);
       }
       if(item.account === "Mercado Pago"){

@@ -35,4 +35,5 @@ export interface MovementBalanceViewModel {
   balanceAr: number;
   balanceUSD: number;
   stateCompleted: StateCompleted;
+  expensiveByCategory: Record<string, number>;
 }
